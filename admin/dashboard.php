@@ -1,18 +1,15 @@
 
 <?php
-session_start();
 
 $pageTitle = "Dashboard";
 
-
-// Check if the user is logged in
-if (!isset($_SESSION['user'])) {
-    header("Location: ../index.php");
-    exit();
-}
+include '../functions.php';
 include 'partials/header.php'; // Include header here
 include 'partials/side-bar.php'; // Include sidebar here
-
+$subjectCount = countAllSubjects();
+    $total_subjects = countAllSubjects();
+    $total_students = countAllStudents();
+    $passedAndFailedSubject = calculateTotalPassedAndFailedStudents();
 ?>
 
     
@@ -25,7 +22,7 @@ include 'partials/side-bar.php'; // Include sidebar here
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white border-primary">Number of Subjects:</div>
                 <div class="card-body text-primary">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $total_subjects; ?></h5>
                 </div>
             </div>
         </div>
@@ -33,7 +30,7 @@ include 'partials/side-bar.php'; // Include sidebar here
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white border-primary">Number of Students:</div>
                 <div class="card-body text-success">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $total_students; ?></h5>
                 </div>
             </div>
         </div>
@@ -41,7 +38,7 @@ include 'partials/side-bar.php'; // Include sidebar here
             <div class="card border-danger mb-3">
                 <div class="card-header bg-danger text-white border-danger">Number of Failed Students:</div>
                 <div class="card-body text-danger">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $passedandfailedsubject['failed']; ?></h5>
                 </div>
             </div>
         </div>
@@ -49,7 +46,7 @@ include 'partials/side-bar.php'; // Include sidebar here
             <div class="card border-success mb-3">
                 <div class="card-header bg-success text-white border-success">Number of Passed Students:</div>
                 <div class="card-body text-success">
-                    <h5 class="card-title">0></h5>
+                    <h5 class="card-title"><?php echo $passedandfailedsubject['passed']; ?></h5>
                 </div>
             </div>
         </div>
