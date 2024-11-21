@@ -18,25 +18,6 @@
     }
     // Function to validate the login credentials
     function checkLoginCredentials($email, $password) {
-        $conn = dbConnect();
-    
-        // Prepare the SQL query to fetch the user by email
-        $sql = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-    
-        // Bind the email parameter to the SQL query
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-    
-        // Get the result
-        $result = $stmt->get_result();
-    
-        if ($result->num_rows > 0) {
-            $users = $result->fetch_assoc();
-    
-            // Debugging: Print stored password and hash comparison
-            
-    
             if (md5($password) === $users['password']) {
                 return $users; // Return user data if the password matches
             } else {
@@ -82,4 +63,3 @@
         } else {
             return "<li>Invalid email or password.</li>";
         }
-    }
