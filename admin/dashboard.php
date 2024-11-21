@@ -2,14 +2,16 @@
 <?php
 
 $pageTitle = "Dashboard";
-
-include '../functions.php';
+require_once '../functions.php'; 
 include 'partials/header.php'; // Include header here
 include 'partials/side-bar.php'; // Include sidebar here
-$subjectCount = countAllSubjects();
-    $total_subjects = countAllSubjects();
-    $total_students = countAllStudents();
-    $passedAndFailedSubject = calculateTotalPassedAndFailedStudents();
+
+
+// Now you can safely call countAllStudents()
+
+$total_subjects = countAllSubjects();
+$total_students = countAllStudents();  // This function should now work
+$passedandfailedsubject = calculateTotalPassedAndFailedStudents();
 ?>
 
     
@@ -55,5 +57,5 @@ $subjectCount = countAllSubjects();
 <!-- Template Files here -->
 
 <?php 
-    require '../partials/footer.php';
+    include 'partials/footer.php';  // Corrected path
 ?>
