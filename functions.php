@@ -3,36 +3,58 @@
 
     // All project functions should be placed here
     function dbConnect() {
-        $host = "localhost"; // Server hostname
-        $username = "root";  // Database username
-        $password = "";      // Database password
-        $database = "dct-ccs-finals"; // Database name
-    
-        // Create a new connection
+        $host = "localhost";
+        $username = "root";
+        $password = "";
+        $database = "dct-ccs-finals";
+        
         $conn = new mysqli($host, $username, $password, $database);
         
-        // Check for connection error
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            die("Connection failed: " . $conn->connect_error . " (Error Code: " . $conn->connect_errno . ")");
         }
         
-        return $conn; // Return the connection object
+        return $conn;
     }
+    // Function to validate the login credentials
+    function checkLoginCredentials($email, $password) {
+        $conn = dbConnect();
     
+        // Prepare the SQL query to fetch the user by email
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
     
-    // Example of using the function to get a database connection
-    $conn = dbConnect();
+        // Bind the email parameter to the SQL query
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
     
+        // Get the result
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            $users = $result->fetch_assoc();
+    
+            // Debugging: Print stored password and hash comparison
+            
+    
+            if (md5($password) === $users['password']) {
+                return $users; // Return user data if the password matches
+            } else {
 
-    function guard() {
-        if (empty($_SESSION['email']) && basename($_SERVER['PHP_SELF']) != 'index.php') {
-            header("Location: index.php"); 
-            exit;
+                return false; // Invalid password
+            }
+        } else {
+
+            return false; // No user found with that email
         }
     }
+    
     function loginUser($email, $password) {
         $errors = [];
-        $notification = null;
+    
+        // Sanitize inputs
+        $email = trim($email);
+        $password = trim($password);
     
         // Validate the form fields
         if (empty($email)) {
@@ -49,15 +71,15 @@
             return displayErrors($errors); // Return error messages
         }
     
-        // Call the function to check credentials
-        if (checkLoginCredentials($email, $password)) {
+        // Check credentials
+        $user = checkLoginCredentials($email, $password);
+        if ($user) {
             // If credentials are correct, set session variables and redirect to dashboard
-            $_SESSION['email'] = $email;
+            $_SESSION['email'] = $user['email'];
             $_SESSION['current_page'] = 'dashboard.php';
             header("Location: admin/dashboard.php");
             exit;
         } else {
-            $notification = "<li>Invalid email or password.</li>";
-            return $notification;
+            return "<li>Invalid email or password.</li>";
         }
     }
