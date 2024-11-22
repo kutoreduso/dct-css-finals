@@ -6,12 +6,12 @@ session_start();
 
 require_once '../../functions.php';
 include('../partials/header.php');
-include('../partials/side-bar.php');
+
 
 $errors = [];
 $student_data = [];
 
-if(!isset($_SESSION['student_data'])) {
+if (!isset($_SESSION['student_data'])) {
     $_SESSION['student_data'] = [];
 }
 
@@ -44,6 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // If there are errors, store them in the session to display on the form
     $_SESSION['errors'] = $errors;
+}
+
+// Example usage of selectStudents to fetch students from the database
+$students = selectStudents(); // This will call the function defined in functions.php
+
+// Display the list of students
+if (!empty($students)) {
+    foreach ($students as $student) {
+        echo "Student ID: " . $student['student_id'] . "<br>";
+        echo "First Name: " . $student['first_name'] . "<br>";
+        echo "Last Name: " . $student['last_name'] . "<br><br>";
+    }
+} else {
+    echo "No students found.";
 }
 ?>
 
