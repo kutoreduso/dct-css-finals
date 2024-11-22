@@ -4,7 +4,6 @@ $pageTitle = "Student Register ";
 session_start();
 
 
-
 require_once '../../functions.php';
 include('../partials/header.php');
 include('../partials/side-bar.php');
