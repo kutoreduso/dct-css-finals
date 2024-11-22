@@ -250,5 +250,27 @@ function addStudentData($student_id, $first_name, $last_name) {
     // Return the result of the insert operation (true on success, false on failure)
     return $result;
 }
+function deleteStudentById($student_id) {
+    // Establish a connection to the database
+    $conn = dbConnect();
 
+    // Prepare the SQL query to delete the student record based on student_id
+    $sql = "DELETE FROM students WHERE student_id = ?";
+
+    // Prepare the statement
+    $stmt = $conn->prepare($sql);
+
+    // Bind the student_id parameter to the prepared statement
+    $stmt->bind_param("s", $student_id);
+
+    // Execute the statement
+    $result = $stmt->execute();
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+
+    // Return the result of the delete operation (true on success, false on failure)
+    return $result;
+}
 ?>
