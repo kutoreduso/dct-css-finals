@@ -200,5 +200,31 @@ function validateStudentData($data) {
 
     return $errors;
 }
-
+function checkDuplicateStudentData($student_id) {
+    // Establish a connection to the database (dbConnect() should be defined earlier)
+    $conn = dbConnect();
+    
+    // Prepare the SQL query to check for an existing student ID
+    $sql = "SELECT COUNT(*) FROM students WHERE student_id = ?";
+    
+    // Prepare the statement
+    $stmt = $conn->prepare($sql);
+    
+    // Bind the student ID parameter to the prepared statement
+    $stmt->bind_param('s', $student_id);  // 's' for string
+    
+    // Execute the query
+    $stmt->execute();
+    
+    // Get the result
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+    
+    // Return true if a student with this ID already exists, false otherwise
+    return $count > 0;
+}
 ?>
