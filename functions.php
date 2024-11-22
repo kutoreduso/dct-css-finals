@@ -178,4 +178,17 @@
             return ['passed' => 0, 'failed' => 0];
         }
     }
+    function selectStudents() {
+        // Assuming you have a database connection set up in $conn
+        global $conn;
+    
+        $sql = "SELECT student_id, first_name, last_name FROM students";
+        $result = $conn->query($sql);
+    
+        if ($result && $result->num_rows > 0) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+    
+        return [];
+    }
     ?>
