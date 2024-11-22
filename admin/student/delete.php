@@ -5,48 +5,45 @@ require_once '../../functions.php';
 include('../partials/header.php');
 
 $studenttodelete = null;
-
 if (isset($_GET['student_id'])) {
     $student_id = $_GET['student_id'];
-
-    // Remove debugging output
-    // echo '<pre>';
-    // print_r($_SESSION['student_data']);
-    // echo '</pre>';
-
-    if (!empty($_SESSION['student_data'])) {
-        foreach ($_SESSION['student_data'] as $student) {
-            // Remove the debugging output here as well
-            // echo 'Comparing: ' . $student['student_id'] . ' with ' . $student_id . '<br>';
-
-            if ((string) $student['student_id'] === (string) $student_id) {
-                $studenttodelete = $student;
-                break;
-            }
-        }
+    
+    // Connect to the database and fetch the student data
+    $conn = dbConnect();
+    $sql = "SELECT * FROM students WHERE student_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $student_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $studenttodelete = $result->fetch_assoc();
+    } else {
+        $studenttodelete = null;
     }
+    $stmt->close();
+    $conn->close();
 } else {
-    header("Location: register.php");
+    header("Location: register.php");  // Redirect to register page if no student_id is provided
     exit;
 }
 
+// If the form is submitted (POST request)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['student_id'])) {
     $student_id = $_POST['student_id'];
 
-    if (!empty($_SESSION['student_data'])) {
-        foreach ($_SESSION['student_data'] as $key => $student) {
-            if ($student['student_id'] === $student_id) {
-                unset($_SESSION['student_data'][$key]);
-                $_SESSION['student_data'] = array_values($_SESSION['student_data']);
-                break;
-            }
-        }
+    // Call the delete function
+    if (deleteStudentById($student_id)) {
+        // Redirect to the register page if the deletion was successful
+        header("Location: register.php");
+        exit;
+    } else {
+        // Error message in case of failure
+        $error_message = "Failed to delete the student. Please try again.";
     }
-    header("Location: register.php");
-    exit;
 }
-?>
 
+?>
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar Section -->
