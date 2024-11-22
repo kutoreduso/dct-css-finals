@@ -227,4 +227,28 @@ function checkDuplicateStudentData($student_id) {
     // Return true if a student with this ID already exists, false otherwise
     return $count > 0;
 }
+function addStudentData($student_id, $first_name, $last_name) {
+    // Establish a connection to the database
+    $conn = dbConnect();  // Ensure dbConnect() is properly defined elsewhere
+
+    // Prepare the SQL query to insert the student data
+    $sql = "INSERT INTO students (student_id, first_name, last_name) VALUES (?, ?, ?)";
+    
+    // Prepare the statement
+    $stmt = $conn->prepare($sql);
+    
+    // Bind the parameters to the prepared statement
+    $stmt->bind_param("sss", $student_id, $first_name, $last_name);  // 's' for string
+    
+    // Execute the statement
+    $result = $stmt->execute();
+    
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+    
+    // Return the result of the insert operation (true on success, false on failure)
+    return $result;
+}
+
 ?>
