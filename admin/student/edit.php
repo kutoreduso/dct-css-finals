@@ -10,7 +10,7 @@ $errors = [];
 $studenttoedit = null;
 
 // Connect to the database
-$conn = connectDB(); // Replace this with your actual database connection function
+$conn = dbConnect(); // Replace this with your actual database connection function
 
 // Check if `student_id` is passed in the URL
 if (isset($_REQUEST['student_id'])) {
