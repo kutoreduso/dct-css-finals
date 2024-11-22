@@ -9,9 +9,42 @@ include('../partials/header.php');
 include('../partials/side-bar.php');
 
 $errors = [];
+$student_data = [];
 
+if(!isset($_SESSION['student_data'])) {
+    $_SESSION['student_data'] = [];
+}
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize and validate input data
+    $student_id = trim($_POST['student_id'] ?? '');
+    $first_name = trim($_POST['first_name'] ?? '');
+    $last_name = trim($_POST['last_name'] ?? '');
+    
+    $student_data = compact('student_id', 'first_name', 'last_name');
 
+    // Validate input
+    $errors = validateStudentData($student_data);
+
+    if (empty($errors)) {
+        // Check for duplicate student ID
+        if (checkDuplicateStudentData($student_id)) {
+            $errors[] = "Error: Student ID already exists.";
+        } else {
+            // Attempt to add the student data
+            if (addStudentData($student_id, $first_name, $last_name)) {
+                // Redirect on successful addition
+                header("Location: register.php?success=1");
+                exit;
+            } else {
+                $errors[] = "Error: Could not add the student. Please try again.";
+            }
+        }
+    }
+
+    // If there are errors, store them in the session to display on the form
+    $_SESSION['errors'] = $errors;
+}
 ?>
 
 
