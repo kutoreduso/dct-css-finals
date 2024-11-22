@@ -50,15 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $students = selectStudents(); // This will call the function defined in functions.php
 
 // Display the list of students
-if (!empty($students)) {
-    foreach ($students as $student) {
-        echo "Student ID: " . $student['student_id'] . "<br>";
-        echo "First Name: " . $student['first_name'] . "<br>";
-        echo "Last Name: " . $student['last_name'] . "<br><br>";
-    }
-} else {
-    echo "No students found.";
-}
+
 ?>
 
 
