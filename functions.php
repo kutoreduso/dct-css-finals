@@ -18,24 +18,6 @@
     }
     // Function to validate the login credentials
     function checkLoginCredentials($email, $password) {
- 
-        // Prepare the SQL query to fetch the user by email
-        $sql = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-    
-        // Bind the email parameter to the SQL query
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-    
-        // Get the result
-        $result = $stmt->get_result();
-    
-        if ($result->num_rows > 0) {
-            $users = $result->fetch_assoc();
-    
-            // Debugging: Print stored password and hash comparison
-            
-    
             if (md5($password) === $users['password']) {
                 return $users; // Return user data if the password matches
             } else {
@@ -177,18 +159,5 @@
             // Return 0 if the query fails
             return ['passed' => 0, 'failed' => 0];
         }
-    }
-    function selectStudents() {
-        // Assuming you have a database connection set up in $conn
-        global $conn;
-    
-        $sql = "SELECT student_id, first_name, last_name FROM students";
-        $result = $conn->query($sql);
-    
-        if ($result && $result->num_rows > 0) {
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-    
-        return [];
     }
     ?>
