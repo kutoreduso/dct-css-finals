@@ -178,4 +178,27 @@ function selectStudents() {
         return [];
     }
 }
+function validateStudentData($data) {
+    $errors = [];
+
+    // Check if student ID is provided and valid
+    if (empty($data['student_id'])) {
+        $errors[] = 'Student ID is required.';
+    }
+
+    // Check if first name is provided
+    if (empty($data['first_name'])) {
+        $errors[] = 'First name is required.';
+    }
+
+    // Check if last name is provided
+    if (empty($data['last_name'])) {
+        $errors[] = 'Last name is required.';
+    }
+
+    // Additional validation logic can be added here
+
+    return $errors;
+}
+
 ?>
