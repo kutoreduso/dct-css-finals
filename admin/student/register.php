@@ -149,5 +149,6 @@ if (!empty($students)) {
     </div>
 </div>
 <?php 
-    include '../partial/footer.php';
+   include '../partials/footer.php';  // Correct path to footer.php
+
 ?>
