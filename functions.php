@@ -159,4 +159,23 @@ function calculateTotalPassedAndFailedStudents() {
     }
 }
 
+function selectStudents() {
+    // Establish a connection to the database (assumes dbConnect() is already defined)
+    $conn = dbConnect();
+
+    // SQL query to select all students
+    $sql = "SELECT * FROM students"; // Adjust this if necessary
+
+    // Execute the query
+    $result = $conn->query($sql);
+
+    // Check if the query was successful
+    if ($result) {
+        // Fetch all students as an associative array
+        return $result->fetch_all(MYSQLI_ASSOC);
+    } else {
+        // Return an empty array or handle the error if no students were found
+        return [];
+    }
+}
 ?>
