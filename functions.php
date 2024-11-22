@@ -225,8 +225,7 @@ function checkDuplicateStudentData($student_id) {
     $conn->close();
     
     // Return true if a student with this ID already exists, false otherwise
-    return $coun
-    t > 0;
+    return $count > 0;
 }
 function addStudentData($student_id, $first_name, $last_name) {
     // Establish a connection to the database
